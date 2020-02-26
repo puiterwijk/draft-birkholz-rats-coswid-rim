@@ -17,6 +17,10 @@ reference-measurement-entry = {
   rim-link-hash => bytes,
 }
 
+$$payload-extension //= ( ? support-rim-type-kramdown => direct / indirect )
+$$payload-extension //= ( ? support-rim-format => text )
+$$payload-extension //= ( ? support-rim-uri-global => any-uri )
+
 reference-measurement = 58
 payload-type = 59
 platform-configuration-uri-global = 60
