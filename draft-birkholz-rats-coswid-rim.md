@@ -61,8 +61,6 @@ author:
   country: USA
 
 normative:
-  BCP26: RFC8126
-  BCP178: RFC6648
   RFC2119:
   RFC8288:
   RFC8520:
