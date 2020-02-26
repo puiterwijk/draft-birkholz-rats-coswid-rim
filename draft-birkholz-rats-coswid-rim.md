@@ -73,11 +73,10 @@ normative:
   RFC8526:
 
 informative:
-  RFC4949:
   I-D.fedorkow-rats-network-device-attestation: riv
   I-D.ietf-rats-architecture: rats-arch
   I-D.ietf-rats-eat: eat
-  
+
 --- abstract
 
 Concise Software Identification (CoSWID) tags identify and describe individual software components, patches, and installation bundles. CoSWID is based on ISO/IEC 19770-2:2015 2:2015 that provides a complementary XML schema definition (XSD) for Software Identification (SWID) tags. CoSWID supports the same features as the corresponding XML SWID tags. The CoSWID specification also includes more structured extensibility features and reduces a few of ambiguities that are not explicitly resolved in the ISO SXD. In this document, these extensibility features (extension points) are used to add attributes to the CoSWID specification. The new attributes allow for the use of CoSWID as Reference Integrity Measurements (RIM). There are three set of RIM features defined in this specification. 1.) attributes that support RIM manifests for Measured Boot, 2.) attributes that support the RPM package manager structure, and 3.) attributes that allow for OID to be used in the description of Reference Integrity Measurements.
@@ -100,7 +99,7 @@ This document provides an extension to the CoSWID specification defined in RFC X
 
 Furthermore, a usage profile for signed CoSWID tags is defined that supports the software-component structure of the RPM packet management system [ref]. Signed CoSWID tags that are aligned with that software m
 
-Reference Integrity Measurements provide a vital resource to be consumed by 
+Reference Integrity Measurements provide a vital resource to be consumed by
 
 ## Requirements Notation
 
