@@ -1,0 +1,504 @@
+
+
+
+
+SACM Working Group                                           H. Birkholz
+Internet-Draft                                            Fraunhofer SIT
+Intended status: Standards Track                            P. Uiterwijk
+Expires: 29 August 2020                                          Red Hat
+                                                     J. Fitzgerald-McKay
+                                                   Department of Defense
+                                                              M. Wiseman
+                                                      GE Global Research
+                                                           D. Waltermire
+                                                                    NIST
+                                                        26 February 2020
+
+
+     Reference Integrity Measurement Extension for Concise Software
+                               Identities
+                 draft-birkholz-rats-coswid-rim-latest
+
+Abstract
+
+   Concise Software Identification (CoSWID) tags identify and describe
+   individual software components, patches, and installation bundles.
+   CoSWID is based on ISO/IEC 19770-2:2015 2:2015 that provides a
+   complementary XML schema definition (XSD) for Software Identification
+   (SWID) tags.  CoSWID supports the same features as the corresponding
+   XML SWID tags.  The CoSWID specification also includes more
+   structured extensibility features and reduces a few of ambiguities
+   that are not explicitly resolved in the ISO SXD.  In this document,
+   these extensibility features (extension points) are used to add
+   attributes to the CoSWID specification.  The new attributes allow for
+   the use of CoSWID as Reference Integrity Measurements (RIM).  There
+   are three set of RIM features defined in this specification. 1.)
+   attributes that support RIM manifests for Measured Boot, 2.)
+   attributes that support the RPM package manager structure, and 3.)
+   attributes that allow for OID to be used in the description of
+   Reference Integrity Measurements.
+
+Note to Readers
+
+   Discussion of this document takes place on the RATS Working Group
+   mailing list (rats@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/rats/
+   (https://mailarchive.ietf.org/arch/browse/rats/).
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/ietf-rats/draft-birkholz-rats-coswid-rim
+   (https://github.com/ietf-rats/draft-birkholz-rats-coswid-rim).
+
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 1]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 29 August 2020.
+
+Copyright Notice
+
+   Copyright (c) 2020 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Simplified BSD License text
+   as described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Requirements Notation . . . . . . . . . . . . . . . . . .   4
+   2.  CoSWID Attribute Extensions . . . . . . . . . . . . . . . . .   4
+     2.1.  RIM extensions for Measured Boot  . . . . . . . . . . . .   4
+   3.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
+     3.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     3.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+
+
+
+
+
+
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 2]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+1.  Introduction
+
+   Reference Integrity Measurements describe the intended state of
+   (composite) software components installed on a (composite) device.  A
+   measurement of all installed software components of a devices allows
+   for assertions about the trustworthiness of the given device.  In
+   combination with a root of trust (RoT) for reporting (RTM), these
+   measurements can be refined into evidence and enable IETF Remote
+   Attestation Procedures (RATS).  RATS support the decision process of
+   whether to put trust in the trustworthiness of a device - or not.
+
+   The RATS architecture [I-D.ietf-rats-architecture] defines the roles
+   Verifiers, Attesters, Endorsers, and Relying Parties.  The RATS
+   architecture also specifies that Attestation Evidence is created by
+   Attesters and consumed by Verifiers.  Ultimately, the goal is to
+   enable a Relying Party to put trust in the trustworthiness of a
+   remote peer (the Attester).  Attestation Evidence is composed of
+   believable assertions about an Attester's trustworthiness
+   characteristics.  In RATS, these assertions are called Claims.  The
+   Verifier conducts a set of appraisal procedures in order to assess
+   the compliance of an Attester's trustworthiness characteristics.
+
+   The most prominent appraisal procedure in RATS is the comparison of
+   Claim values included in Attestation Evidence with Reference Claim
+   values provided by Endorsers (e.g. supply chain entities).  The
+   comparison of Claim values via Reference Claim values is vital for
+   the assessment of compliance metrics with respect to software
+   components installed on an Attester.  A typical objective here is the
+   remediation of already vulnerabilities discovered in certain versions
+   of software components.
+
+   The Integrity Measurement Architecture (IMA) of the Linux Security
+   Modules (LSM) provides a detailed Event Log (sometimes also referred
+   to as a Measurement Log) that retains a sequence of hash measurements
+   of every software sub-component (e.g. a firmware, an ELF executable,
+   or a configuration file) that is created and appended to the sequence
+   of measurements that composes the event log before the software
+   component in question is started or read.
+
+   In essence, to enable this appraisal procedure conducted by Verfiers
+   an Attester's IMA provides Event Logs that include the hash values of
+   every started software component and therefore are part of the
+   Attestation Evidence an Attester creates.  The complementary well-
+   known-values that Verifiers require are included in the Reference
+   Integrity Measurements (RIM).  RIMs can be provided via Software
+   Identification tags created by Endorsers, such as the software
+   creators, manufacturers, vendors, or other trusted third parties
+   (e.g. supply chain or certification entities).
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 3]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+   This document provides an extension to the CoSWID specification
+   defined in RFC XXXX.  The extension adds attributes to CoSWID tags
+   that enable them to express RIMs.  A vital subset of these attributes
+   are illustrated in the TCG Reference Integrity Manifest Information
+   Model [ref] specification.  These attributes are added to the
+   existing CoSWID specification via the most general extension point
+   the CoSWID specification provides: $$coswid-extensions.  An
+   additional map definition named "reference-measurements" is added and
+   is defined in section [ref] of this document.
+
+   Furthermore, a usage profile for signed CoSWID tags is defined that
+   supports the software-component structure of the RPM packet
+   management system [ref].  Signed CoSWID tags that are aligned with
+   that software m
+
+   Reference Integrity Measurements provide a vital resource to be
+   consumed by
+
+1.1.  Requirements Notation
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.  CoSWID Attribute Extensions
+
+   This specification defines three types of attribute sets that can be
+   added to the CoSWID specification via its defined extension points.
+
+   1.  Attributes that support RIM manifests for Measured Boot (often
+       still referred to as Secure Boot),
+
+   2.  Attributes that support the RPM package manager structure, and
+
+   3.  Attributes that allow for OID to be used in the description of
+       Reference Integrity Measurements.
+
+2.1.  RIM extensions for Measured Boot
+
+   The following attributes are derived from the TCG Reference Integrity
+   Manifest Information Model [ref] specification.  These attributes
+   support the creation of relatively small CoSWID tags that enable the
+   Remote Integrity Verification (RIV
+   [I-D.fedorkow-rats-network-device-attestation]) of small things
+   (constrained devices in constrained network environments).
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 4]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+   +--------------+----------+-----------------------------------------+
+   | Attribute    | Quantity | Description                             |
+   | Name         |          |                                         |
+   +==============+==========+=========================================+
+   | payload-type | 0-1      | 'direct': the representation used in    |
+   |              |          | this RIM (and referred RIMs) is using   |
+   |              |          | CoSWID as it's representation.          |
+   +--------------+----------+-----------------------------------------+
+   |              |          | 'indirect': the representation used     |
+   |              |          | in referred RIMs ('Support RIMs) is     |
+   |              |          | using a different representation than   |
+   |              |          | CoSWID.  Analogously, a reference to    |
+   |              |          | the corresponding specification is      |
+   |              |          | required (see binding-spec-name and     |
+   |              |          | binding-spec-version).                  |
+   +--------------+----------+-----------------------------------------+
+   |              |          | 'hybrid': the representation used in    |
+   |              |          | referred RIMs ('Support RIMs) is a      |
+   |              |          | mix of the CoSWID representation and    |
+   |              |          | other representations.  In this case,   |
+   |              |          | a reference to the representation       |
+   |              |          | MUST be included - even if it is the    |
+   |              |          | CoSWID representation - for every       |
+   |              |          | Support RIM.                            |
+   +--------------+----------+-----------------------------------------+
+
+                                  Table 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 5]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+   <CODE BEGINS>
+   $$coswid-extension //= (reference-measurement => reference-measurement-entry)
+
+   reference-measurement-entry = {
+     ? payload-type => direct / indirect / hybrid,
+     ? platform-configuration-uri-global => any-uri,
+     ? platform-configuration-uri-local => any-uri,
+     binding-spec-name => text,
+     binding-spec-version => text,
+     platform-manufacturer-id => uint,
+     platform-manufacturer-name => text,
+     platform-model-name => text,
+     ? platform-version => uint,
+     ? firmware-manufacturer-id => uint,
+     ? firmware-manufacturer-name => text,
+     ? firmware-model-name => text,
+     ? firmware-version => uint,
+     rim-link-hash => bytes,
+   }
+
+   reference-measurement = 58
+   payload-type = 59
+   platform-configuration-uri-global = 60
+   platform-configuration-uri-local = 61
+   binding-spec-name = 62
+   binding-spec-version = 63
+   platform-manufacturer-id = 64
+   platform-manufacturer-name = 65
+   platform-model-name = 66
+   platform-version = 67
+   firmware-manufacturer-id = 68
+   firmware-manufacturer-name = 69
+   firmware-model-name = 70
+   firmware-version = 71
+   rim-link-hash = 72
+
+   direct = 0
+   indirect = 1
+   hybrid = 2
+
+   $$directory-extension //= ( ? hash => hash-entry )
+
+   $$resource-extension //= ( ? hash => hash-entry )
+
+   $$process-extension //= ( ? hash => hash-entry )
+   <CODE ENDS>
+
+3.  References
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 6]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+3.1.  Normative References
+
+   [BCP178]   Saint-Andre, P., Crocker, D., and M. Nottingham,
+              "Deprecating the "X-" Prefix and Similar Constructs in
+              Application Protocols", BCP 178, RFC 6648,
+              DOI 10.17487/RFC6648, June 2012,
+              <https://www.rfc-editor.org/info/rfc6648>.
+
+   [BCP26]    Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/info/rfc8126>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
+              RFC 7950, DOI 10.17487/RFC7950, August 2016,
+              <https://www.rfc-editor.org/info/rfc7950>.
+
+   [RFC8071]  Watsen, K., "NETCONF Call Home and RESTCONF Call Home",
+              RFC 8071, DOI 10.17487/RFC8071, February 2017,
+              <https://www.rfc-editor.org/info/rfc8071>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8288]  Nottingham, M., "Web Linking", RFC 8288,
+              DOI 10.17487/RFC8288, October 2017,
+              <https://www.rfc-editor.org/info/rfc8288>.
+
+   [RFC8342]  Bjorklund, M., Schoenwaelder, J., Shafer, P., Watsen, K.,
+              and R. Wilton, "Network Management Datastore Architecture
+              (NMDA)", RFC 8342, DOI 10.17487/RFC8342, March 2018,
+              <https://www.rfc-editor.org/info/rfc8342>.
+
+   [RFC8510]  Psenak, P., Ed., Talaulikar, K., Henderickx, W., and P.
+              Pillay-Esnault, "OSPF Link-Local Signaling (LLS)
+              Extensions for Local Interface ID Advertisement",
+              RFC 8510, DOI 10.17487/RFC8510, January 2019,
+              <https://www.rfc-editor.org/info/rfc8510>.
+
+   [RFC8520]  Lear, E., Droms, R., and D. Romascanu, "Manufacturer Usage
+              Description Specification", RFC 8520,
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 7]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+              DOI 10.17487/RFC8520, March 2019,
+              <https://www.rfc-editor.org/info/rfc8520>.
+
+   [RFC8526]  Bjorklund, M., Schoenwaelder, J., Shafer, P., Watsen, K.,
+              and R. Wilton, "NETCONF Extensions to Support the Network
+              Management Datastore Architecture", RFC 8526,
+              DOI 10.17487/RFC8526, March 2019,
+              <https://www.rfc-editor.org/info/rfc8526>.
+
+3.2.  Informative References
+
+   [I-D.fedorkow-rats-network-device-attestation]
+              Fedorkow, G. and J. Fitzgerald-McKay, "Network Device
+              Remote Integrity Verification", Work in Progress,
+              Internet-Draft, draft-fedorkow-rats-network-device-
+              attestation-02, 21 February 2020, <http://www.ietf.org/
+              internet-drafts/draft-fedorkow-rats-network-device-
+              attestation-02.txt>.
+
+   [I-D.ietf-rats-architecture]
+              Birkholz, H., Thaler, D., Richardson, M., and N. Smith,
+              "Remote Attestation Procedures Architecture", Work in
+              Progress, Internet-Draft, draft-ietf-rats-architecture-01,
+              4 February 2020, <http://www.ietf.org/internet-drafts/
+              draft-ietf-rats-architecture-01.txt>.
+
+   [I-D.ietf-rats-eat]
+              Mandyam, G., Lundblade, L., Ballesteros, M., and J.
+              O'Donoghue, "The Entity Attestation Token (EAT)", Work in
+              Progress, Internet-Draft, draft-ietf-rats-eat-03, 20
+              February 2020, <http://www.ietf.org/internet-drafts/draft-
+              ietf-rats-eat-03.txt>.
+
+Authors' Addresses
+
+   Henk Birkholz
+   Fraunhofer SIT
+   Rheinstrasse 75
+   64295 Darmstadt
+   Germany
+
+   Email: henk.birkholz@sit.fraunhofer.de
+
+
+   Patrick Uiterwijk
+   Red Hat
+   100 E Davie Street
+   27601 Raleigh
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 8]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
+
+   Netherlands
+
+   Email: puiterwijk@redhat.com
+
+
+   Jessica Fitzgerald-McKay
+   Department of Defense
+   9800 Savage Road
+   Ft. Meade, Maryland
+   United States of America
+
+   Email: jmfitz2@nsa.gov
+
+
+   Monty Wiseman
+   GE Global Research
+   United States of America
+
+   Email: monty.wiseman@ge.com
+
+
+   David Waltermire
+   National Institute of Standards and Technology
+   100 Bureau Drive
+   Gaithersburg, Maryland 20877
+   United States of America
+
+   Email: david.waltermire@nist.gov
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 9]
