@@ -942,7 +942,10 @@ table.left {
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-coswid-attribute-extensions" class="xref">CoSWID Attribute Extensions</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
 <ul class="toc ulEmpty">
 <li class="toc ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-rim-extensions-for-measured" class="xref">RIM extensions for Measured Boot</a><a href="#section-toc.1-1.2.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-rim-requirements-on-existin" class="xref">RIM requirements on existing CoSWID attributes</a><a href="#section-toc.1-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-rim-extensions-for-measured" class="xref">RIM extensions for Measured Boot</a><a href="#section-toc.1-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </li>
@@ -1005,12 +1008,21 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <li id="section-2-2.3">Attributes that allow for OID to be used in the description of Reference Integrity Measurements.<a href="#section-2-2.3" class="pilcrow">¶</a>
 </li>
 </ol>
-<div id="rim-extensions-for-measured-boot">
+<div id="rim-requirements-on-existing-coswid-attributes">
 <section id="section-2.1">
-        <h3 id="name-rim-extensions-for-measured">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-rim-extensions-for-measured" class="section-name selfRef">RIM extensions for Measured Boot</a>
+        <h3 id="name-rim-requirements-on-existin">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-rim-requirements-on-existin" class="section-name selfRef">RIM requirements on existing CoSWID attributes</a>
         </h3>
-<p id="section-2.1-1">The following attributes are derived from the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes support the creation of relatively small CoSWID tags that enable the Remote Integrity Verification (RIV <span>[<a href="#I-D.fedorkow-rats-network-device-attestation" class="xref">I-D.fedorkow-rats-network-device-attestation</a>]</span>) of small things (constrained devices in constrained network environments).<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-1">As defined by NIST IR 8060 [ref], there are required "Meta Attributes" for XML SWID tags that have to be included in a SWID tag in order to compose a valid SWID RIM. In this section, these attributes are mapped to CoSWID attributes and corresponding requirements on attributes defined in the CoSWID specification to compose valid NIST IR 8060 signed Payload content in the Concise Software Identity Reference Integrity Measurement (CoSWID RIM) representation.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">The 'software-meta-entry' type defined in the CoSWID specification includes the optional members 'product', 'colloquial-version', 'revision', and 'edition'. These four members MUST be included in a CoSWID RIM in order to compose a valid Reference Integrity Measurement in alignment with NIST IR 8060. Furthermore, the semantics of the text (tstr) typed values MUST convey content that allows for semantic interoperability in a given scope (e.g. an administrative domain). The software-meta-entries are hints for the RATS verifier role to support discovery and matching of appropriate CoSWID RIM available to or discoverable by a verifier.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="rim-extensions-for-measured-boot">
+<section id="section-2.2">
+        <h3 id="name-rim-extensions-for-measured">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-rim-extensions-for-measured" class="section-name selfRef">RIM extensions for Measured Boot</a>
+        </h3>
+<p id="section-2.2-1">The following attributes are derived from the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes support the creation of very small CoSWID RIM tags that enable the Remote Integrity Verification (RIV <span>[<a href="#I-D.fedorkow-rats-network-device-attestation" class="xref">I-D.fedorkow-rats-network-device-attestation</a>]</span>) of small things, i.e. constrained devices in constrained network environments. In consequence, the majority of the attributes listed in this section represent metadata about firmware and supply chain entities that provide firmware for a device (platform). Most identifiers defined in the table below are hints. This design is motivated by the vast variety of identifier types used in production today. It is vital to highlight that this variety poses a significant threshold that inhibits semantic self-descriptiveness. Nevertheless, interoperability beats self-descriptiveness. Nevertheless, a convergence towards a common identification scheme is highly encourages - alas not achieved yet - at the time of creating this proposed standard.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
           <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
@@ -1024,21 +1036,46 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             <tr>
               <td class="text-left" rowspan="1" colspan="1">payload-type</td>
               <td class="text-left" rowspan="1" colspan="1">0-1</td>
-              <td class="text-left" rowspan="1" colspan="1">'direct': the representation used in this RIM (and referred RIMs) is using CoSWID as it's representation.</td>
+              <td class="text-left" rowspan="1" colspan="1">'direct': the representation used in this RIM (and referred RIMs) is using the CoSWID encoding as it's representation. 'indirect': the representation used in referred RIMs ('Support RIMs) is using a different representation than CoSWID as it's encoding. Analogously, a reference to the corresponding specification MUST be provided if the value is set to an equivalent of 'indirect' (see binding-spec-name and binding-spec-version). 'hybrid': the representation used in the referred RIMs ('Support RIMs') is a mix of CoSWID representations and other representations. In this case, a reference to the representation used MUST be included - even if it is the CoSWID representation - for every Support RIM (see 'binding-spec-name' and 'binding-spec-version' definition in this table).</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">'indirect': the representation used in referred RIMs ('Support RIMs) is using a different representation than CoSWID. Analogously, a reference to the corresponding specification is required (see binding-spec-name and binding-spec-version).</td>
+              <td class="text-left" rowspan="1" colspan="1">platform-configuration-uri-global</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">A byte-comparable reference to a Platform Configuration URI as defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019] for X.509v3 certificates that MUST be identical to the URI included in a TCG Platform Certificate pointing to a resource providing a copy of the CoSWID RIM this attribute is included in.</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">'hybrid': the representation used in referred RIMs ('Support RIMs) is a mix of the CoSWID representation and other representations. In this case, a reference to the representation MUST be included - even if it is the CoSWID representation - for every Support RIM.</td>
+              <td class="text-left" rowspan="1" colspan="1">platform-configuration-uri-local</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">A byte-comparable reference to a Platform Configuration URI defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019] that represents the resource at which a copy of this CoSWID RIM can be found within the (composite) device/platform itself.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">binding-spec-name</td>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">If the value of 'payload-type' is an equivalent to the enumeration 'indirect' the value of this attribute MUST contain a global unique text (tstr) identifier referring to the specification that defines the representation of the referred RIM in order to enable its decoding.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">binding-spec-version</td>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">If the value of 'payload-type' is an equivalent to the enumeration 'indirect' the value of this attribute MUST contain a unique version number with respect to the specification represented in the value of 'binding-spec-name'.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">platform-manufacturer-id</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier based on the IANA Private Enterprise Number registry that is assigned to firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform manufacturer are represented by the same text (tstr) value. Analogously, if the firmware manufacturer and the platform manufacturer are represented via the same text (tstr) value, this attribute MAY be omitted.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">platform-manufacturer-name</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier number (uint) value that uniquely represents the firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform platform manufacturer are represented via the same number (unit) value, this attribute MAY be omitted.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">platform-model-name</td>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier text (tstr) value enabling the identification of a certain device model/type composite. The reliability of this identifier is not absolute. In consequence this identifier MUST NOT be omitted. In an case, the use of this identifier requires foresight and preparation as it supports semantic interoperability, significantly.</td>
             </tr>
           </tbody>
         </table>
-<div id="section-2.1-3">
+<div id="section-2.2-3">
 <pre class="sourcecode lang-CDDL">&lt;CODE BEGINS&gt;
 $$coswid-extension //= (reference-measurement =&gt; reference-measurement-entry)
 
@@ -1058,6 +1095,10 @@ reference-measurement-entry = {
   ? firmware-version =&gt; uint,
   rim-link-hash =&gt; bytes,
 }
+
+$$payload-extension //= ( ? support-rim-type-kramdown =&gt; direct / indirect )
+$$payload-extension //= ( ? support-rim-format =&gt; text )
+$$payload-extension //= ( ? support-rim-uri-global =&gt; any-uri )
 
 reference-measurement = 58
 payload-type = 59
@@ -1085,7 +1126,7 @@ $$resource-extension //= ( ? hash =&gt; hash-entry )
 
 $$process-extension //= ( ? hash =&gt; hash-entry )
 
-&lt;CODE ENDS&gt;</pre><a href="#section-2.1-3" class="pilcrow">¶</a>
+&lt;CODE ENDS&gt;</pre><a href="#section-2.2-3" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
