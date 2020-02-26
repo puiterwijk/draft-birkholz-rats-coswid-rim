@@ -97,7 +97,7 @@ Table of Contents
      2.1.  RIM extensions for Measured Boot  . . . . . . . . . . . .   4
    3.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
      3.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
-     3.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+     3.2.  Informative References  . . . . . . . . . . . . . . . . .   7
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 
@@ -340,17 +340,6 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 3.1.  Normative References
 
-   [BCP178]   Saint-Andre, P., Crocker, D., and M. Nottingham,
-              "Deprecating the "X-" Prefix and Similar Constructs in
-              Application Protocols", BCP 178, RFC 6648,
-              DOI 10.17487/RFC6648, June 2012,
-              <https://www.rfc-editor.org/info/rfc6648>.
-
-   [BCP26]    Cotton, M., Leiba, B., and T. Narten, "Guidelines for
-              Writing an IANA Considerations Section in RFCs", BCP 26,
-              RFC 8126, DOI 10.17487/RFC8126, June 2017,
-              <https://www.rfc-editor.org/info/rfc8126>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -385,15 +374,6 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
    [RFC8520]  Lear, E., Droms, R., and D. Romascanu, "Manufacturer Usage
               Description Specification", RFC 8520,
-
-
-
-
-Birkholz, et al.         Expires 29 August 2020                 [Page 7]
-
-Internet-Draft                 CoSWID RIM                  February 2020
-
-
               DOI 10.17487/RFC8520, March 2019,
               <https://www.rfc-editor.org/info/rfc8520>.
 
@@ -404,6 +384,15 @@ Internet-Draft                 CoSWID RIM                  February 2020
               <https://www.rfc-editor.org/info/rfc8526>.
 
 3.2.  Informative References
+
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 7]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
 
    [I-D.fedorkow-rats-network-device-attestation]
               Fedorkow, G. and J. Fitzgerald-McKay, "Network Device
@@ -442,14 +431,6 @@ Authors' Addresses
    Red Hat
    100 E Davie Street
    27601 Raleigh
-
-
-
-Birkholz, et al.         Expires 29 August 2020                 [Page 8]
-
-Internet-Draft                 CoSWID RIM                  February 2020
-
-
    Netherlands
 
    Email: puiterwijk@redhat.com
@@ -460,6 +441,14 @@ Internet-Draft                 CoSWID RIM                  February 2020
    9800 Savage Road
    Ft. Meade, Maryland
    United States of America
+
+
+
+
+Birkholz, et al.         Expires 29 August 2020                 [Page 8]
+
+Internet-Draft                 CoSWID RIM                  February 2020
+
 
    Email: jmfitz2@nsa.gov
 
@@ -478,6 +467,17 @@ Internet-Draft                 CoSWID RIM                  February 2020
    United States of America
 
    Email: david.waltermire@nist.gov
+
+
+
+
+
+
+
+
+
+
+
 
 
 
