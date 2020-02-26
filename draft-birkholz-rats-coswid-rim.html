@@ -978,8 +978,8 @@ table.left {
 <p id="section-1-4">The Integrity Measurement Architecture (IMA) of the Linux Security Modules (LSM) provides a detailed Event Log (sometimes also referred to as a Measurement Log) that retains a sequence of hash measurements of every software sub-component (e.g. a firmware, an ELF executable, or a configuration file) that is created and appended to the sequence of measurements that composes the event log before the software component in question is started or read.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">In essence, to enable this appraisal procedure conducted by Verfiers an Attester's IMA provides Event Logs that include the hash values of every started software component and therefore are part of the Attestation Evidence an Attester creates. The complementary well-known-values that Verifiers require are included in the Reference Integrity Measurements (RIM). RIMs can be provided via Software Identification tags created by Endorsers, such as the software creators, manufacturers, vendors, or other trusted third parties (e.g. supply chain or certification entities).<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">This document provides an extension to the CoSWID specification defined in RFC XXXX. The extension adds attributes to CoSWID tags that enable them to express RIMs. A vital subset of these attributes are illustrated in the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes are added to the existing CoSWID specification via the most general extension point the CoSWID specification provides: $$coswid-extensions. An additional map definition named "reference-measurements" is added and is defined in section [ref] of this document.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">Furthermore, a usage profile for signed CoSWID tags is defined that supports the software-component structure of the RPM packet management system [ref]. Signed CoSWID tags that are aligned with that software m<a href="#section-1-7" class="pilcrow">¶</a></p>
-<p id="section-1-8">Reference Integrity Measurements provide a vital resource to be consumed by<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-7">Furthermore, a usage profile for signed CoSWID tags is defined in this specification in support of the software-component structure of the RPM packet management system [ref]. Signed CoSWID tags that are aligned with that software m ... TBD<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">Reference Integrity Measurements provide a vital resource to be consumed by ... TBD<a href="#section-1-8" class="pilcrow">¶</a></p>
 <div id="requirements-notation">
 <section id="section-1.1">
         <h3 id="name-requirements-notation">
@@ -1036,7 +1036,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             <tr>
               <td class="text-left" rowspan="1" colspan="1">payload-type</td>
               <td class="text-left" rowspan="1" colspan="1">0-1</td>
-              <td class="text-left" rowspan="1" colspan="1">'direct': the representation used in this RIM (and referred RIMs) is using the CoSWID encoding as it's representation. 'indirect': the representation used in referred RIMs ('Support RIMs) is using a different representation than CoSWID as it's encoding. Analogously, a reference to the corresponding specification MUST be provided if the value is set to an equivalent of 'indirect' (see binding-spec-name and binding-spec-version). 'hybrid': the representation used in the referred RIMs ('Support RIMs') is a mix of CoSWID representations and other representations. In this case, a reference to the representation used MUST be included - even if it is the CoSWID representation - for every Support RIM (see 'binding-spec-name' and 'binding-spec-version' definition in this table).</td>
+              <td class="text-left" rowspan="1" colspan="1">The value of this attribute MUST be one equivalent of the following three choices. 'direct': the representation used in this RIM (and referred RIMs) is using the CoSWID encoding as it's representation. 'indirect': the representation used in referred RIMs ('Support RIMs) is using a different representation than CoSWID as it's encoding. Analogously, a reference to the corresponding specification MUST be provided if the value is set to an equivalent of 'indirect' (see binding-spec-name and binding-spec-version). 'hybrid': the representation used in the referred RIMs ('Support RIMs') is a mix of CoSWID representations and other representations. In this case, a reference to the representation used MUST be included - even if it is the CoSWID representation - for every Support RIM (see 'binding-spec-name' and 'binding-spec-version' definition in this table).</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">platform-configuration-uri-global</td>
@@ -1046,17 +1046,17 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             <tr>
               <td class="text-left" rowspan="1" colspan="1">platform-configuration-uri-local</td>
               <td class="text-left" rowspan="1" colspan="1">0-1</td>
-              <td class="text-left" rowspan="1" colspan="1">A byte-comparable reference to a Platform Configuration URI defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019] that represents the resource at which a copy of this CoSWID RIM can be found within the (composite) device/platform itself.</td>
+              <td class="text-left" rowspan="1" colspan="1">A byte-comparable reference to a Platform Configuration URI defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019] that MUST represent the resource at which a copy of this CoSWID RIM can be found within the (composite) device/platform itself.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">binding-spec-name</td>
               <td class="text-left" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">If the value of 'payload-type' is an equivalent to the enumeration 'indirect' the value of this attribute MUST contain a global unique text (tstr) identifier referring to the specification that defines the representation of the referred RIM in order to enable its decoding.</td>
+              <td class="text-left" rowspan="1" colspan="1">If the value of 'payload-type' is an equivalent to the enumeration 'indirect', the value of this attribute MUST contain a global unique text (tstr) identifier referring to the specification that defines the representation of the referred RIM in order to enable its decoding.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">binding-spec-version</td>
               <td class="text-left" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">If the value of 'payload-type' is an equivalent to the enumeration 'indirect' the value of this attribute MUST contain a unique version number with respect to the specification represented in the value of 'binding-spec-name'.</td>
+              <td class="text-left" rowspan="1" colspan="1">If the value of 'payload-type' is an equivalent to the enumeration 'indirect', the value of this attribute MUST contain a unique version number with respect to the specification represented in the value of 'binding-spec-name'.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">platform-manufacturer-id</td>
@@ -1071,7 +1071,32 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             <tr>
               <td class="text-left" rowspan="1" colspan="1">platform-model-name</td>
               <td class="text-left" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">An identifier text (tstr) value enabling the identification of a certain device model/type composite. The reliability of this identifier is not absolute. In consequence this identifier MUST NOT be omitted. In an case, the use of this identifier requires foresight and preparation as it supports semantic interoperability, significantly.</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier text (tstr) value enabling the identification of a certain device model/type composite. The reliability of this identifier is not absolute. In consequence this identifier MUST NOT be omitted. In an case, the use of this identifier requires foresight and preparation as it's purpose supports semantic interoperability. Arbitrary, conflicting, or unresolvable values SHOULD be avoided.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">platform-version</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">A byte-comparable reference to a Platform Certificate's 'Manufacturer-Specific Identifier' extension value [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019].</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">firmware-manufacturer-id</td>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">An IANA defined unique value that is a Private Enterprise Number (Platform manufacturer unique identifier)that MUST be included in a CoSWID RIM.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">firmware-manufacturer-name</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier that is represented as the name of a platform manufacturer via a text (tstr) value that SHOULD be included in a CoSWID RIM.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">firmware-model-name</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier that represents the target platform model via a text (tstr) value that SHOULD be included in a CoSWID RIM [FIXME: this seems to be the wrong intent]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">firmware-version</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier that is represented as the version number of a specific firmware version corresponding to a given set of platform identifiers and SHOULD be included in a CoSWID RIM.</td>
             </tr>
           </tbody>
         </table>
@@ -1115,6 +1140,9 @@ firmware-manufacturer-name = 69
 firmware-model-name = 70
 firmware-version = 71
 rim-link-hash = 72
+support-rim-type-kramdown =73
+support-rim-format = 74
+support-rim-uri-global = 75
 
 direct = 0
 indirect = 1
