@@ -263,10 +263,10 @@ Internet-Draft                 CoSWID RIM                  February 2020
    variety of identifier types used in production today.  It is vital to
    highlight that this variety poses a significant threshold that
    inhibits semantic self-descriptiveness.  Nevertheless,
-   interoperability beats self-descriptiveness.  Nevertheless, a
-   convergence towards a common identification scheme is highly
-   encourages - alas not achieved yet - at the time of creating this
-   proposed standard.
+   interoperability beats self-descriptiveness.  A convergence towards a
+   common identification scheme with respect to software components and
+   its subset that is firmware is highly encouraged - alas not achieved
+   at the time of creating this proposed standard.
 
    +-----------------------------------+--------+----------------------+
    | Attribute Name                    |Quantity| Description          |
