@@ -36,6 +36,9 @@ firmware-manufacturer-name = 69
 firmware-model-name = 70
 firmware-version = 71
 rim-link-hash = 72
+support-rim-type-kramdown =73
+support-rim-format = 74
+support-rim-uri-global = 75
 
 direct = 0
 indirect = 1
