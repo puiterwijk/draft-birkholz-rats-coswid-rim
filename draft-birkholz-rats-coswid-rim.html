@@ -1024,7 +1024,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-rim-requirements-on-existin" class="section-name selfRef">RIM requirements on existing CoSWID attributes</a>
         </h3>
 <p id="section-2.1-1">As defined by NIST IR 8060 [ref], there are required "Meta Attributes" for XML SWID tags that have to be included in a SWID tag in order to compose a valid SWID RIM. In this section, these attributes are mapped to CoSWID attributes and corresponding requirements on attributes defined in the CoSWID specification to compose valid NIST IR 8060 signed Payload content in the Concise Software Identity Reference Integrity Measurement (CoSWID RIM) representation.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">The 'software-meta-entry' type defined in the CoSWID specification includes the optional members 'product', 'colloquial-version', 'revision', and 'edition'. These four members MUST be included in a CoSWID RIM in order to compose a valid Reference Integrity Measurement in alignment with NIST IR 8060. Furthermore, the semantics of the text (tstr) typed values MUST convey content that allows for semantic interoperability in a given scope (e.g. an administrative domain). The software-meta-entries are hints for the RATS verifier role to support discovery and matching of appropriate CoSWID RIM available to or discoverable by a verifier.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">The 'software-meta-entry' type defined in the CoSWID specification includes the optional members 'product', 'colloquial-version', 'revision', and 'edition'. These four members MUST be included in a CoSWID RIM in order to compose a valid Reference Integrity Measurement in alignment with NIST IR 8060. Furthermore, the semantics of the text (tstr) typed values MUST convey content that allows for semantic interoperability in a given scope (e.g. an administrative domain). The software-meta-entries provide vital support for steering decisions made by the RATS verifier role in order to enable discovery and matching of related or additional CoSWID RIM available to or discoverable by the verifier.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rim-extensions-for-measured-boot">
@@ -1032,7 +1032,8 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
         <h3 id="name-rim-extensions-for-measured">
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-rim-extensions-for-measured" class="section-name selfRef">RIM extensions for Measured Boot</a>
         </h3>
-<p id="section-2.2-1">The following attributes are derived from the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes support the creation of very small CoSWID RIM tags that enable the Remote Integrity Verification (RIV <span>[<a href="#I-D.fedorkow-rats-network-device-attestation" class="xref">I-D.fedorkow-rats-network-device-attestation</a>]</span>) of small things, i.e. constrained devices in constrained network environments. In consequence, the majority of the attributes listed in this section represent metadata about firmware and supply chain entities that provide firmware for a device (platform). Most identifiers defined in the table below are hints. This design is motivated by the vast variety of identifier types used in production today. It is vital to highlight that this variety poses a significant threshold that inhibits semantic self-descriptiveness. Nevertheless, interoperability beats self-descriptiveness. A convergence towards a common identification scheme with respect to software components and its subset that is firmware is highly encouraged - alas not achieved at the time of creating this proposed standard.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">The following attributes are derived from the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes support the creation of very small CoSWID RIM tags that enable the Remote Integrity Verification (RIV <span>[<a href="#I-D.fedorkow-rats-network-device-attestation" class="xref">I-D.fedorkow-rats-network-device-attestation</a>]</span>) of small things, i.e. constrained devices in constrained network environments. In consequence, the majority of the attributes listed in this section represent metadata about firmware and supply chain entities that provide firmware for a device (platform). Analogously to the mandated software-meta-entries illustrated above, the attributes defined in the table below provide more context and enable steering decisions for the appraisal procedures of a Verifier. Consecutively, RIM have to be managed and curated in a consistent manner so that there is no significant threshold for a Verifier to make use of them during an appraisal procedure.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-2">The design of the following attributes is motivated by the vast variety of identifier types used in production today, e.g. endorsement documents <span>[<a href="#I-D.ietf-rats-architecture" class="xref">I-D.ietf-rats-architecture</a>]</span> that are enrolled or on-boarded on the Attester itself. It is vital to highlight that this variety can render semantic self-descriptiveness more difficult. Most importantly though: interoperability beats self-descriptiveness. A convergence towards a common identification scheme with respect to software components and its subset that is firmware is highly encouraged - alas not achieved at the time of creating this proposed standard.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
           <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
@@ -1076,7 +1077,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             <tr>
               <td class="text-left" rowspan="1" colspan="1">platform-manufacturer-name</td>
               <td class="text-left" rowspan="1" colspan="1">0-1</td>
-              <td class="text-left" rowspan="1" colspan="1">An identifier number (uint) value that uniquely represents the firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform platform manufacturer are represented via the same number (unit) value, this attribute MAY be omitted.</td>
+              <td class="text-left" rowspan="1" colspan="1">An identifier number (uint) value that uniquely represents the firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform manufacturer are represented via the same number (unit) value, this attribute MAY be omitted.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">platform-model-name</td>
@@ -1110,7 +1111,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
             </tr>
           </tbody>
         </table>
-<div id="section-2.2-3">
+<div id="section-2.2-4">
 <pre class="sourcecode lang-CDDL">&lt;CODE BEGINS&gt;
 $$coswid-extension //= (reference-measurement =&gt; reference-measurement-entry)
 
@@ -1164,7 +1165,7 @@ $$resource-extension //= ( ? hash =&gt; hash-entry )
 
 $$process-extension //= ( ? hash =&gt; hash-entry )
 
-&lt;CODE ENDS&gt;</pre><a href="#section-2.2-3" class="pilcrow">¶</a>
+&lt;CODE ENDS&gt;</pre><a href="#section-2.2-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
