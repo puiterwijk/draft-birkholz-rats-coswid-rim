@@ -1,0 +1,784 @@
+
+
+
+
+RATS Working Group                                           H. Birkholz
+Internet-Draft                                            Fraunhofer SIT
+Intended status: Standards Track                            P. Uiterwijk
+Expires: 10 September 2020                                       Red Hat
+                                                     J. Fitzgerald-McKay
+                                                   Department of Defense
+                                                           D. Waltermire
+                                                                    NIST
+                                                            9 March 2020
+
+
+     Reference Integrity Measurement Extension for Concise Software
+                               Identities
+                 draft-birkholz-rats-coswid-rim-latest
+
+Abstract
+
+   Concise Software Identification (CoSWID) tags identify and describe
+   individual software components, patches, and installation bundles.
+   CoSWID is based on ISO/IEC 19770-2:2015 2:2015 that provides a
+   complementary XML schema definition (XSD) for Software Identification
+   (SWID) tags.  CoSWID supports the same features as the corresponding
+   XML SWID tags.  The CoSWID specification also includes more
+   structured extensibility features and reduces a few of ambiguities
+   that are not explicitly resolved in the ISO XSD.  In this document,
+   these extensibility features (extension points) are used to add
+   attributes to the CoSWID specification.  The new attributes allow for
+   the use of CoSWID as Reference Integrity Measurements (RIM).  There
+   are three set of RIM features defined in this specification. 1.)
+   attributes that support RIM manifests for Measured Boot, 2.)
+   attributes that support package manager managed structures, and 3.)
+   attributes that allow for OID to be used in the description of
+   Reference Integrity Measurements.
+
+Note to Readers
+
+   Discussion of this document takes place on the RATS Working Group
+   mailing list (rats@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/rats/
+   (https://mailarchive.ietf.org/arch/browse/rats/).
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/ietf-rats/draft-birkholz-rats-coswid-rim
+   (https://github.com/ietf-rats/draft-birkholz-rats-coswid-rim).
+
+
+
+
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 1]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 10 September 2020.
+
+Copyright Notice
+
+   Copyright (c) 2020 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Simplified BSD License text
+   as described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Requirements Notation . . . . . . . . . . . . . . . . . .   4
+   2.  CoSWID Attribute Extensions . . . . . . . . . . . . . . . . .   4
+     2.1.  RIM requirements on existing CoSWID attributes  . . . . .   5
+     2.2.  RIM extensions for Measured Boot  . . . . . . . . . . . .   5
+     2.3.  Additional Measurement Attributes for CoSWID  . . . . . .  10
+     2.4.  CoSWID RIM CDDL . . . . . . . . . . . . . . . . . . . . .  11
+   3.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     3.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
+     3.2.  Informative References  . . . . . . . . . . . . . . . . .  13
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
+
+
+
+
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 2]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+1.  Introduction
+
+   Reference Integrity Measurements describe the intended state of
+   (composite) software components installed on a (composite) device.  A
+   measurement of all installed software components of a devices allows
+   for assertions about the trustworthiness of the given device.  In
+   combination with a root of trust (RoT) for reporting (RTM), these
+   measurements can be refined into evidence and enable IETF Remote
+   Attestation ProcedureS (RATS).  RATS support the decision process of
+   whether to put trust in the trustworthiness of a device - or not.
+
+   The RATS architecture [I-D.ietf-rats-architecture] defines the roles
+   Verifiers, Attesters, Endorsers, and Relying Parties.  The RATS
+   architecture also specifies that Attestation Evidence is created by
+   Attesters and consumed by Verifiers.  Ultimately, the goal is to
+   enable a Relying Party to put trust in the trustworthiness of a
+   remote peer (the Attester).  Attestation Evidence is composed of
+   believable assertions about an Attester's trustworthiness
+   characteristics.  In RATS, these assertions are called Claims.  The
+   Verifier conducts a set of appraisal procedures in order to assess
+   the compliance of an Attester's trustworthiness characteristics.
+
+   The most prominent appraisal procedure in RATS is the comparison of
+   Claim values included in Attestation Evidence with Reference Claim
+   values provided by Endorsers (e.g. supply chain entities).  The
+   comparison of Claim values via Reference Claim values is vital for
+   the assessment of compliance metrics with respect to software
+   components installed on an Attester.  A typical objective here is the
+   remediation of already vulnerabilities discovered in certain versions
+   of software components.
+
+   The Integrity Measurement Architecture (IMA) of the Linux Security
+   Modules (LSM) provides a detailed Event Log (sometimes also referred
+   to as a Measurement Log) that retains a sequence of hash measurements
+   of every software sub-component (e.g. a firmware, an ELF executable,
+   or a configuration file) that is created and appended to the sequence
+   of measurements that composes the event log before the software
+   component in question is started or read.
+
+   In essence, to enable this appraisal procedure conducted by Verfiers
+   an Attester's IMA provides Event Logs that include the hash values of
+   every started software component and therefore are part of the
+   Attestation Evidence an Attester creates.  The complementary well-
+   known-values that Verifiers require are included in the Reference
+   Integrity Measurements (RIM).  RIMs can be provided via Software
+   Identification tags created by Endorsers, such as the software
+   creators, manufacturers, vendors, or other trusted third parties
+   (e.g. supply chain or certification entities).
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 3]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   This document provides an extension to the CoSWID specification
+   defined in [I-D.ietf-sacm-coswid].  The extension adds attributes to
+   CoSWID tags that enable them to express RIMs.  A vital subset of
+   these attributes are illustrated in the TCG Reference Integrity
+   Manifest Information Model [ref] specification.  These attributes are
+   added to the existing CoSWID specification via the most general
+   extension point the CoSWID specification provides: $$coswid-
+   extensions.  An additional map definition named "reference-
+   measurements" is added and is defined in section [ref] of this
+   document.
+
+   Furthermore, a usage profile for signed CoSWID tags is defined in
+   this specification in support of the software-component structure of
+   systems managed by package managers.  Signed CoSWID tags that are
+   aligned with that software model can be used to describe the contents
+   of one or multiple of the packages that make up the contents of a
+   system.  In this case, it may be that multiple CoSWID tags are
+   provided as Reference Claim values for a attestation by a single
+   Attester.  In order to minimize the impact on the sizes of packages,
+   it is likely that any CoSWID tags delivered as part of packages as
+   part of a package manager managed system will not contain actual
+   reference values, but instead a link-entry to a CoSWID tag published
+   by the vendor in a repository.
+
+   Reference Integrity Measurements provide a vital resource to be
+   consumed by ... TBD
+
+1.1.  Requirements Notation
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.  CoSWID Attribute Extensions
+
+   This specification defines three types of attribute sets that can be
+   added to the CoSWID specification via its defined extension points.
+
+   1.  Attributes that support RIM manifests for Measured Boot (often
+       still referred to as Secure Boot),
+
+   2.  Attributes that support the RPM package manager structure, and
+
+   3.  Attributes that allow for OID to be used in the description of
+       Reference Integrity Measurements.
+
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 4]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+2.1.  RIM requirements on existing CoSWID attributes
+
+   As defined by NIST IR 8060 [ref], there are required "Meta
+   Attributes" for XML SWID tags that have to be included in a SWID tag
+   in order to compose a valid SWID RIM.  In this section, these
+   attributes are mapped to CoSWID attributes and corresponding
+   requirements on attributes defined in the CoSWID specification to
+   compose valid NIST IR 8060 signed Payload content in the Concise
+   Software Identity Reference Integrity Measurement (CoSWID RIM)
+   representation.
+
+   The 'software-meta-entry' type defined in the CoSWID specification
+   includes the optional members 'product', 'colloquial-version',
+   'revision', and 'edition'.  These four members MUST be included in a
+   CoSWID RIM in order to compose a valid Reference Integrity
+   Measurement in alignment with NIST IR 8060.  Furthermore, the
+   semantics of the text (tstr) typed values MUST convey content that
+   allows for semantic interoperability in a given scope (e.g. an
+   administrative domain).  The software-meta-entries provide vital
+   support for steering decisions made by the RATS verifier role in
+   order to enable discovery and matching of related or additional
+   CoSWID RIM available to or discoverable by the verifier.
+
+2.2.  RIM extensions for Measured Boot
+
+   The following attributes are derived from the TCG Reference Integrity
+   Manifest Information Model [ref] specification.  These attributes
+   support the creation of very small CoSWID RIM tags that enable the
+   Remote Integrity Verification (RIV
+   [I-D.fedorkow-rats-network-device-attestation]) of small things, i.e.
+   constrained devices in constrained network environments.  In
+   consequence, the majority of the attributes listed in this section
+   represent metadata about firmware and supply chain entities that
+   provide firmware for a device (platform).  Analogously to the
+   mandated software-meta-entries illustrated above, the attributes
+   defined in the table below provide more context and enable steering
+   decisions for the appraisal procedures of a Verifier.  Consecutively,
+   RIM have to be managed and curated in a consistent manner so that
+   there is no significant threshold for a Verifier to make use of them
+   during an appraisal procedure.
+
+   The design of the following attributes is motivated by the vast
+   variety of identifier types used in production today, e.g.
+   endorsement documents [I-D.ietf-rats-architecture] that are enrolled
+   or on-boarded on the Attester itself.  It is vital to highlight that
+   this variety can render semantic self-descriptiveness more difficult.
+   Most importantly though: interoperability beats self-descriptiveness.
+   A convergence towards a common identification scheme with respect to
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 5]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   software components and its subset that is firmware is highly
+   encouraged - alas not achieved at the time of creating this proposed
+   standard.
+
+   +-----------------------------------+--------+----------------------+
+   | Attribute Name                    |Quantity| Description          |
+   +===================================+========+======================+
+   | payload-type                      | 0-1    | The value of this    |
+   |                                   |        |attribute MUST be one |
+   |                                   |        | equivalent of the    |
+   |                                   |        | following three      |
+   |                                   |        |choices. 'direct': the|
+   |                                   |        |representation used in|
+   |                                   |        |this RIM (and referred|
+   |                                   |        | RIMs) is using the   |
+   |                                   |        |CoSWID encoding as its|
+   |                                   |        | representation.      |
+   |                                   |        | 'indirect': the      |
+   |                                   |        |representation used in|
+   |                                   |        | referred RIMs        |
+   |                                   |        | ('Support RIMs) is   |
+   |                                   |        | using a different    |
+   |                                   |        | representation than  |
+   |                                   |        | CoSWID as it's       |
+   |                                   |        | encoding.            |
+   |                                   |        | Analogously, a       |
+   |                                   |        | reference to the     |
+   |                                   |        | corresponding        |
+   |                                   |        |specification MUST be |
+   |                                   |        |provided if the value |
+   |                                   |        | is set to an         |
+   |                                   |        | equivalent of        |
+   |                                   |        | 'indirect' (see      |
+   |                                   |        |binding-spec-name and |
+   |                                   |        |binding-spec-version).|
+   |                                   |        | 'hybrid': the        |
+   |                                   |        |representation used in|
+   |                                   |        | the referred RIMs    |
+   |                                   |        |('Support RIMs') is a |
+   |                                   |        | mix of CoSWID        |
+   |                                   |        | representations and  |
+   |                                   |        |other representations.|
+   |                                   |        | In this case, a      |
+   |                                   |        | reference to the     |
+   |                                   |        | representation used  |
+   |                                   |        | MUST be included -   |
+   |                                   |        | even if it is the    |
+   |                                   |        |CoSWID representation |
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 6]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   |                                   |        | - for every Support  |
+   |                                   |        | RIM (see 'binding-   |
+   |                                   |        | spec-name' and       |
+   |                                   |        |'binding-spec-version'|
+   |                                   |        | definition in this   |
+   |                                   |        | table).              |
+   +-----------------------------------+--------+----------------------+
+   | platform-configuration-uri-global | 0-1    | A byte-comparable    |
+   |                                   |        | reference to a       |
+   |                                   |        |Platform Configuration|
+   |                                   |        |URI as defined by the |
+   |                                   |        | TCG Platform         |
+   |                                   |        | Certificate Profile  |
+   |                                   |        | [ref TCG Platform    |
+   |                                   |        | Certificate Profile, |
+   |                                   |        |Version 1.1 Revision 1|
+   |                                   |        | 5 13 Feb 2019] for   |
+   |                                   |        | X.509v3 certificates |
+   |                                   |        |that MUST be identical|
+   |                                   |        |to the URI included in|
+   |                                   |        | a TCG Platform       |
+   |                                   |        | Certificate pointing |
+   |                                   |        | to a resource        |
+   |                                   |        | providing a copy of  |
+   |                                   |        | the CoSWID RIM this  |
+   |                                   |        |attribute is included |
+   |                                   |        | in.                  |
+   +-----------------------------------+--------+----------------------+
+   | platform-configuration-uri-local  | 0-1    | A byte-comparable    |
+   |                                   |        | reference to a       |
+   |                                   |        |Platform Configuration|
+   |                                   |        |URI defined by the TCG|
+   |                                   |        | Platform Certificate |
+   |                                   |        | Profile [ref TCG     |
+   |                                   |        | Platform Certificate |
+   |                                   |        | Profile, Version 1.1 |
+   |                                   |        | Revision 1 5 13 Feb  |
+   |                                   |        | 2019] that MUST      |
+   |                                   |        |represent the resource|
+   |                                   |        | at which a copy of   |
+   |                                   |        |this CoSWID RIM can be|
+   |                                   |        | found within the     |
+   |                                   |        | (composite) device/  |
+   |                                   |        | platform itself.     |
+   +-----------------------------------+--------+----------------------+
+   | binding-spec-name                 | 1      | If the value of      |
+   |                                   |        | 'payload-type' is an |
+   |                                   |        | equivalent to the    |
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 7]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   |                                   |        | enumeration          |
+   |                                   |        |'indirect', the value |
+   |                                   |        |of this attribute MUST|
+   |                                   |        | contain a global     |
+   |                                   |        | unique text (tstr)   |
+   |                                   |        | identifier referring |
+   |                                   |        | to the specification |
+   |                                   |        | that defines the     |
+   |                                   |        |representation of the |
+   |                                   |        |referred RIM in order |
+   |                                   |        | to enable its        |
+   |                                   |        | decoding.            |
+   +-----------------------------------+--------+----------------------+
+   | binding-spec-version              | 1      | If the value of      |
+   |                                   |        | 'payload-type' is an |
+   |                                   |        | equivalent to the    |
+   |                                   |        | enumeration          |
+   |                                   |        |'indirect', the value |
+   |                                   |        |of this attribute MUST|
+   |                                   |        | contain a unique     |
+   |                                   |        | version number with  |
+   |                                   |        | respect to the       |
+   |                                   |        | specification        |
+   |                                   |        | represented in the   |
+   |                                   |        | value of 'binding-   |
+   |                                   |        | spec-name'.          |
+   +-----------------------------------+--------+----------------------+
+   | platform-manufacturer-id          | 0-1    |An identifier based on|
+   |                                   |        | the IANA Private     |
+   |                                   |        | Enterprise Number    |
+   |                                   |        | registry that is     |
+   |                                   |        | assigned to firmware |
+   |                                   |        | manufacturer.  This  |
+   |                                   |        | identifier MUST be   |
+   |                                   |        | included unless the  |
+   |                                   |        |firmware manufacturer |
+   |                                   |        | and the platform     |
+   |                                   |        | manufacturer are     |
+   |                                   |        | represented by the   |
+   |                                   |        | same text (tstr)     |
+   |                                   |        | value.  Analogously, |
+   |                                   |        | if the firmware      |
+   |                                   |        | manufacturer and the |
+   |                                   |        |platform manufacturer |
+   |                                   |        | are represented via  |
+   |                                   |        | the same text (tstr) |
+   |                                   |        |value, this attribute |
+   |                                   |        | MAY be omitted.      |
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 8]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   +-----------------------------------+--------+----------------------+
+   | platform-manufacturer-name        | 0-1    | An identifier number |
+   |                                   |        | (uint) value that    |
+   |                                   |        | uniquely represents  |
+   |                                   |        | the firmware         |
+   |                                   |        | manufacturer.  This  |
+   |                                   |        | identifier MUST be   |
+   |                                   |        | included unless the  |
+   |                                   |        |firmware manufacturer |
+   |                                   |        | and the platform     |
+   |                                   |        | manufacturer are     |
+   |                                   |        | represented via the  |
+   |                                   |        | same number (unit)   |
+   |                                   |        |value, this attribute |
+   |                                   |        | MAY be omitted.      |
+   +-----------------------------------+--------+----------------------+
+   | platform-model-name               | 1      | An identifier text   |
+   |                                   |        |(tstr) value enabling |
+   |                                   |        |the identification of |
+   |                                   |        | a certain device     |
+   |                                   |        |model/type composite. |
+   |                                   |        | The reliability of   |
+   |                                   |        |this identifier is not|
+   |                                   |        | absolute.  In        |
+   |                                   |        | consequence this     |
+   |                                   |        |identifier MUST NOT be|
+   |                                   |        |omitted.  In an case, |
+   |                                   |        | the use of this      |
+   |                                   |        | identifier requires  |
+   |                                   |        | foresight and        |
+   |                                   |        | preparation as it's  |
+   |                                   |        | purpose supports     |
+   |                                   |        | semantic             |
+   |                                   |        | interoperability.    |
+   |                                   |        | Arbitrary,           |
+   |                                   |        | conflicting, or      |
+   |                                   |        | unresolvable values  |
+   |                                   |        | SHOULD be avoided.   |
+   +-----------------------------------+--------+----------------------+
+   | platform-version                  | 0-1    | A byte-comparable    |
+   |                                   |        | reference to a       |
+   |                                   |        |Platform Certificate's|
+   |                                   |        |'Manufacturer-Specific|
+   |                                   |        |Identifier' extension |
+   |                                   |        | value [ref TCG       |
+   |                                   |        | Platform Certificate |
+   |                                   |        | Profile, Version 1.1 |
+   |                                   |        | Revision 1 5 13 Feb  |
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 9]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   |                                   |        | 2019].               |
+   +-----------------------------------+--------+----------------------+
+   | firmware-manufacturer-id          | 1      |An IANA defined unique|
+   |                                   |        | value that is a      |
+   |                                   |        | Private Enterprise   |
+   |                                   |        | Number (Platform     |
+   |                                   |        | manufacturer unique  |
+   |                                   |        |identifier) that MUST |
+   |                                   |        | be included in a     |
+   |                                   |        | CoSWID RIM.          |
+   +-----------------------------------+--------+----------------------+
+   | firmware-manufacturer-name        | 0-1    |An identifier that is |
+   |                                   |        | represented as the   |
+   |                                   |        | name of a platform   |
+   |                                   |        | manufacturer via a   |
+   |                                   |        |text (tstr) value that|
+   |                                   |        |SHOULD be included in |
+   |                                   |        | a CoSWID RIM.        |
+   +-----------------------------------+--------+----------------------+
+   | firmware-model-name               | 0-1    | An identifier that   |
+   |                                   |        |represents the target |
+   |                                   |        | platform model via a |
+   |                                   |        |text (tstr) value that|
+   |                                   |        |SHOULD be included in |
+   |                                   |        | a CoSWID RIM [FIXME: |
+   |                                   |        | this seems to be the |
+   |                                   |        | wrong intent]        |
+   +-----------------------------------+--------+----------------------+
+   | firmware-version                  | 0-1    |An identifier that is |
+   |                                   |        | represented as the   |
+   |                                   |        | version number of a  |
+   |                                   |        | specific firmware    |
+   |                                   |        |version corresponding |
+   |                                   |        | to a given set of    |
+   |                                   |        | platform identifiers |
+   |                                   |        |and SHOULD be included|
+   |                                   |        | in a CoSWID RIM.     |
+   +-----------------------------------+--------+----------------------+
+
+                                  Table 1
+
+2.3.  Additional Measurement Attributes for CoSWID
+
+   [I-D.ietf-sacm-coswid] specifies a well-defined file hash structure
+   for integrity measurements of individual files in a file-system.
+   This documents extends this feature to all additional members of the
+   resource-collection group: 'directory', 'resource', and 'process'.
+   These new well-defined measurement options extend the scope of RIM to
+
+
+
+Birkholz, et al.        Expires 10 September 2020              [Page 10]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   (sub-)trees of files, software running in memory (e.g. available from
+   Trusted Execution Environments, such as SGX enclaves), and even
+   external resources, such as remote services of collections of RIM
+   bundles.
+
+2.4.  CoSWID RIM CDDL
+
+   The following CDDL specification uses the existing CDDL extension
+   points as defined in [I-D.ietf-sacm-coswid]:
+
+   *  $$coswid-extension
+
+   *  $$payload-extension
+
+   *  $$directory-extension
+
+   *  $$resource-extension
+
+   *  $$process-extension
+
+   <CODE BEGINS>
+   $$coswid-extension //= (reference-measurement => reference-measurement-entry)
+
+   reference-measurement-entry = {
+     ? payload-type => direct / indirect / hybrid,
+     ? platform-configuration-uri-global => any-uri,
+     ? platform-configuration-uri-local => any-uri,
+     binding-spec-name => text,
+     binding-spec-version => text,
+     platform-manufacturer-id => uint,
+     platform-manufacturer-name => text,
+     platform-model-name => text,
+     ? platform-version => uint,
+     ? firmware-manufacturer-id => uint,
+     ? firmware-manufacturer-name => text,
+     ? firmware-model-name => text,
+     ? firmware-version => uint,
+     rim-link-hash => bytes,
+   }
+
+   $$payload-extension //= ( ? support-rim-type-kramdown => direct / indirect )
+   $$payload-extension //= ( ? support-rim-format => text )
+   $$payload-extension //= ( ? support-rim-uri-global => any-uri )
+
+   reference-measurement = 58
+   payload-type = 59
+   platform-configuration-uri-global = 60
+   platform-configuration-uri-local = 61
+
+
+
+Birkholz, et al.        Expires 10 September 2020              [Page 11]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   binding-spec-name = 62
+   binding-spec-version = 63
+   platform-manufacturer-id = 64
+   platform-manufacturer-name = 65
+   platform-model-name = 66
+   platform-version = 67
+   firmware-manufacturer-id = 68
+   firmware-manufacturer-name = 69
+   firmware-model-name = 70
+   firmware-version = 71
+   rim-link-hash = 72
+   support-rim-type-kramdown =73
+   support-rim-format = 74
+   support-rim-uri-global = 75
+
+   direct = 0
+   indirect = 1
+   hybrid = 2
+
+   $$directory-extension //= ( ? hash => hash-entry )
+
+   $$resource-extension //= ( ? hash => hash-entry )
+
+   $$process-extension //= ( ? hash => hash-entry )
+   <CODE ENDS>
+
+3.  References
+
+3.1.  Normative References
+
+   [I-D.ietf-sacm-coswid]
+              Birkholz, H., Fitzgerald-McKay, J., Schmidt, C., and D.
+              Waltermire, "Concise Software Identification Tags", Work
+              in Progress, Internet-Draft, draft-ietf-sacm-coswid-13, 17
+              November 2019, <http://www.ietf.org/internet-drafts/draft-
+              ietf-sacm-coswid-13.txt>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8520]  Lear, E., Droms, R., and D. Romascanu, "Manufacturer Usage
+              Description Specification", RFC 8520,
+
+
+
+Birkholz, et al.        Expires 10 September 2020              [Page 12]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+              DOI 10.17487/RFC8520, March 2019,
+              <https://www.rfc-editor.org/info/rfc8520>.
+
+3.2.  Informative References
+
+   [I-D.fedorkow-rats-network-device-attestation]
+              Fedorkow, G. and J. Fitzgerald-McKay, "Network Device
+              Remote Integrity Verification", Work in Progress,
+              Internet-Draft, draft-fedorkow-rats-network-device-
+              attestation-04, 5 March 2020, <http://www.ietf.org/
+              internet-drafts/draft-fedorkow-rats-network-device-
+              attestation-04.txt>.
+
+   [I-D.ietf-rats-architecture]
+              Birkholz, H., Thaler, D., Richardson, M., Smith, N., and
+              W. Pan, "Remote Attestation Procedures Architecture", Work
+              in Progress, Internet-Draft, draft-ietf-rats-architecture-
+              02, 7 March 2020, <http://www.ietf.org/internet-drafts/
+              draft-ietf-rats-architecture-02.txt>.
+
+   [I-D.ietf-rats-eat]
+              Mandyam, G., Lundblade, L., Ballesteros, M., and J.
+              O'Donoghue, "The Entity Attestation Token (EAT)", Work in
+              Progress, Internet-Draft, draft-ietf-rats-eat-03, 20
+              February 2020, <http://www.ietf.org/internet-drafts/draft-
+              ietf-rats-eat-03.txt>.
+
+Authors' Addresses
+
+   Henk Birkholz
+   Fraunhofer SIT
+   Rheinstrasse 75
+   64295 Darmstadt
+   Germany
+
+   Email: henk.birkholz@sit.fraunhofer.de
+
+
+   Patrick Uiterwijk
+   Red Hat
+   100 E Davie Street
+   27601 Raleigh
+   Netherlands
+
+   Email: puiterwijk@redhat.com
+
+
+
+
+
+
+Birkholz, et al.        Expires 10 September 2020              [Page 13]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
+   Jessica Fitzgerald-McKay
+   Department of Defense
+   9800 Savage Road
+   Ft. Meade, Maryland
+   United States of America
+
+   Email: jmfitz2@nsa.gov
+
+
+   David Waltermire
+   National Institute of Standards and Technology
+   100 Bureau Drive
+   Gaithersburg, Maryland 20877
+   United States of America
+
+   Email: david.waltermire@nist.gov
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Birkholz, et al.        Expires 10 September 2020              [Page 14]
