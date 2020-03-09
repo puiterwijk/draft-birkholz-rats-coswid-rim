@@ -5,14 +5,14 @@
 SACM Working Group                                           H. Birkholz
 Internet-Draft                                            Fraunhofer SIT
 Intended status: Standards Track                            P. Uiterwijk
-Expires: 29 August 2020                                          Red Hat
+Expires: 10 September 2020                                       Red Hat
                                                      J. Fitzgerald-McKay
                                                    Department of Defense
                                                               M. Wiseman
                                                       GE Global Research
                                                            D. Waltermire
                                                                     NIST
-                                                        26 February 2020
+                                                            9 March 2020
 
 
      Reference Integrity Measurement Extension for Concise Software
@@ -28,7 +28,7 @@ Abstract
    (SWID) tags.  CoSWID supports the same features as the corresponding
    XML SWID tags.  The CoSWID specification also includes more
    structured extensibility features and reduces a few of ambiguities
-   that are not explicitly resolved in the ISO SXD.  In this document,
+   that are not explicitly resolved in the ISO XSD.  In this document,
    these extensibility features (extension points) are used to add
    attributes to the CoSWID specification.  The new attributes allow for
    the use of CoSWID as Reference Integrity Measurements (RIM).  There
@@ -53,9 +53,9 @@ Note to Readers
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 1]
+Birkholz, et al.        Expires 10 September 2020               [Page 1]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
 Status of This Memo
@@ -73,7 +73,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2020.
+   This Internet-Draft will expire on 10 September 2020.
 
 Copyright Notice
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 2]
+Birkholz, et al.        Expires 10 September 2020               [Page 2]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
 1.  Introduction
@@ -122,7 +122,7 @@ Internet-Draft                 CoSWID RIM                  February 2020
    for assertions about the trustworthiness of the given device.  In
    combination with a root of trust (RoT) for reporting (RTM), these
    measurements can be refined into evidence and enable IETF Remote
-   Attestation Procedures (RATS).  RATS support the decision process of
+   Attestation ProcedureS (RATS).  RATS support the decision process of
    whether to put trust in the trustworthiness of a device - or not.
 
    The RATS architecture [I-D.ietf-rats-architecture] defines the roles
@@ -165,9 +165,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 3]
+Birkholz, et al.        Expires 10 September 2020               [Page 3]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    This document provides an extension to the CoSWID specification
@@ -221,9 +221,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 4]
+Birkholz, et al.        Expires 10 September 2020               [Page 4]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
 2.1.  RIM requirements on existing CoSWID attributes
@@ -277,9 +277,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 5]
+Birkholz, et al.        Expires 10 September 2020               [Page 5]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    |                                   |        | following three      |
@@ -287,8 +287,8 @@ Internet-Draft                 CoSWID RIM                  February 2020
    |                                   |        |representation used in|
    |                                   |        |this RIM (and referred|
    |                                   |        | RIMs) is using the   |
-   |                                   |        | CoSWID encoding as   |
-   |                                   |        | it's representation. |
+   |                                   |        |CoSWID encoding as its|
+   |                                   |        | representation.      |
    |                                   |        | 'indirect': the      |
    |                                   |        |representation used in|
    |                                   |        | referred RIMs        |
@@ -333,9 +333,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 6]
+Birkholz, et al.        Expires 10 September 2020               [Page 6]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    |                                   |        |URI as defined by the |
@@ -389,9 +389,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 7]
+Birkholz, et al.        Expires 10 September 2020               [Page 7]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    |                                   |        | to enable its        |
@@ -445,9 +445,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 8]
+Birkholz, et al.        Expires 10 September 2020               [Page 8]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    |                                   |        |platform manufacturer |
@@ -495,15 +495,15 @@ Internet-Draft                 CoSWID RIM                  February 2020
    |                                   |        | Private Enterprise   |
    |                                   |        | Number (Platform     |
    |                                   |        | manufacturer unique  |
-   |                                   |        | identifier)that MUST |
+   |                                   |        |identifier) that MUST |
    |                                   |        | be included in a     |
    |                                   |        | CoSWID RIM.          |
 
 
 
-Birkholz, et al.         Expires 29 August 2020                 [Page 9]
+Birkholz, et al.        Expires 10 September 2020               [Page 9]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    +-----------------------------------+--------+----------------------+
@@ -557,9 +557,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                [Page 10]
+Birkholz, et al.        Expires 10 September 2020              [Page 10]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
      rim-link-hash => bytes,
@@ -613,9 +613,9 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                [Page 11]
+Birkholz, et al.        Expires 10 September 2020              [Page 11]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
               RFC 7950, DOI 10.17487/RFC7950, August 2016,
@@ -661,25 +661,25 @@ Internet-Draft                 CoSWID RIM                  February 2020
               Fedorkow, G. and J. Fitzgerald-McKay, "Network Device
               Remote Integrity Verification", Work in Progress,
               Internet-Draft, draft-fedorkow-rats-network-device-
-              attestation-02, 21 February 2020, <http://www.ietf.org/
+              attestation-04, 5 March 2020, <http://www.ietf.org/
               internet-drafts/draft-fedorkow-rats-network-device-
-              attestation-02.txt>.
+              attestation-04.txt>.
 
 
 
 
 
-Birkholz, et al.         Expires 29 August 2020                [Page 12]
+Birkholz, et al.        Expires 10 September 2020              [Page 12]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    [I-D.ietf-rats-architecture]
-              Birkholz, H., Thaler, D., Richardson, M., and N. Smith,
-              "Remote Attestation Procedures Architecture", Work in
-              Progress, Internet-Draft, draft-ietf-rats-architecture-01,
-              4 February 2020, <http://www.ietf.org/internet-drafts/
-              draft-ietf-rats-architecture-01.txt>.
+              Birkholz, H., Thaler, D., Richardson, M., Smith, N., and
+              W. Pan, "Remote Attestation Procedures Architecture", Work
+              in Progress, Internet-Draft, draft-ietf-rats-architecture-
+              02, 7 March 2020, <http://www.ietf.org/internet-drafts/
+              draft-ietf-rats-architecture-02.txt>.
 
    [I-D.ietf-rats-eat]
               Mandyam, G., Lundblade, L., Ballesteros, M., and J.
@@ -725,9 +725,9 @@ Authors' Addresses
 
 
 
-Birkholz, et al.         Expires 29 August 2020                [Page 13]
+Birkholz, et al.        Expires 10 September 2020              [Page 13]
 
-Internet-Draft                 CoSWID RIM                  February 2020
+Internet-Draft                 CoSWID RIM                     March 2020
 
 
    David Waltermire
@@ -781,4 +781,4 @@ Internet-Draft                 CoSWID RIM                  February 2020
 
 
 
-Birkholz, et al.         Expires 29 August 2020                [Page 14]
+Birkholz, et al.        Expires 10 September 2020              [Page 14]
