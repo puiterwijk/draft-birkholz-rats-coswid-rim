@@ -6,7 +6,6 @@ reference-measurement-entry = {
   ? platform-configuration-uri-local => any-uri,
   binding-spec-name => text,
   binding-spec-version => text,
-  payload-rim => any-uri,
   platform-manufacturer-id => uint,
   platform-manufacturer-name => text,
   platform-model-name => text,
@@ -18,9 +17,10 @@ reference-measurement-entry = {
   rim-link-hash => bytes,
 }
 
-$$payload-extension //= ( ? support-rim-type-kramdown => direct / indirect )
-$$payload-extension //= ( ? support-rim-format => text )
-$$payload-extension //= ( ? support-rim-uri-global => any-uri )
+$$payload-extension //= ( ? support-rim-type-kramdown => direct / indirect, )
+$$payload-extension //= ( ? support-rim-format => text, )
+$$payload-extension //= ( ? support-rim-uri-global => any-uri, )
+$$payload-extension //= ( ? rim-reference => any-uri, )
 
 reference-measurement = 58
 payload-type = 59
@@ -41,6 +41,7 @@ rim-link-hash = 73
 support-rim-type-kramdown = 74
 support-rim-format = 75
 support-rim-uri-global = 76
+rim-reference = 77
 
 direct = 0
 indirect = 1

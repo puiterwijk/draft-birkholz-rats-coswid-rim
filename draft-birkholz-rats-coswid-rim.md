@@ -108,7 +108,7 @@ The 'software-meta-entry' type defined in the CoSWID specification includes the 
 
 The following attributes are derived from the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes support the creation of very small CoSWID RIM tags that enable the Remote Integrity Verification (RIV {{-riv}}) of small things, i.e. constrained devices in constrained network environments. In consequence, the majority of the attributes listed in this section represent metadata about firmware and supply chain entities that provide firmware for a device (platform). Analogously to the mandated software-meta-entries illustrated above, the attributes defined in the table below provide more context and enable steering decisions for the appraisal procedures of a Verifier. Consecutively, RIM have to be managed and curated in a consistent manner so that there is no significant threshold for a Verifier to make use of them during an appraisal procedure.
 
-The design of the following attributes is motivated by the vast variety of identifier types used in production today, e.g. endorsement documents {{-rats-arch}} that are enrolled or on-boarded on the Attester itself. It is vital to highlight that this variety can render semantic self-descriptiveness more difficult. Most importantly though: interoperability beats self-descriptiveness. A convergence towards a common identification scheme with respect to software components and its subset that is firmware is highly encouraged - alas not achieved at the time of creating this proposed standard.
+The design of the additional RIM attributes in this section is motivated by the vast variety of identifier types used in production today, e.g. endorsement documents {{-rats-arch}} that are enrolled or on-boarded on the Attester itself. It is vital to highlight that this variety can render semantic self-descriptiveness more difficult. Most importantly though: interoperability beats self-descriptiveness. A convergence towards a common identification scheme with respect to software components and its subset that is firmware is highly encouraged - alas not achieved at the time of creating this proposed standard. The following table defines the semantics of the set of new members that are added via the reference-measurement-entry map. The reference-measurement-entry map is added using the $$coswid-extension CDDL extension point.
 
 | Attribute Name | Quantity | Description
 |---
@@ -117,7 +117,6 @@ The design of the following attributes is motivated by the vast variety of ident
 | platform-configuration-uri-local | 0-1 | A byte-comparable reference to a Platform Configuration URI defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019] that MUST represent the resource at which a copy of this CoSWID RIM can be found within the (composite) device/platform itself.
 | binding-spec-name | 1 | If the value of 'payload-type' is an equivalent to the enumeration 'indirect', the value of this attribute MUST contain a global unique text (tstr) identifier referring to the specification that defines the representation of the referred RIM in order to enable its decoding.
 | binding-spec-version | 1 | If the value of 'payload-type' is an equivalent to the enumeration 'indirect', the value of this attribute MUST contain a unique version number with respect to the specification represented in the value of 'binding-spec-name'.
-| payload-rim | 0-1 | A URI for the CoSWID RIM that will list the payload reference measurements in case of a minimal CoSWID tag.
 | platform-manufacturer-id | 0-1 | An identifier based on the IANA Private Enterprise Number registry that is assigned to firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform manufacturer are represented by the same text (tstr) value. Analogously, if the firmware manufacturer and the platform manufacturer are represented via the same text (tstr) value, this attribute MAY be omitted.
 | platform-manufacturer-name | 0-1 | An identifier number (uint) value that uniquely represents the firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform manufacturer are represented via the same number (unit) value, this attribute MAY be omitted.
 | platform-model-name | 1 | An identifier text (tstr) value enabling the identification of a certain device model/type composite. The reliability of this identifier is not absolute. In consequence this identifier MUST NOT be omitted. In an case, the use of this identifier requires foresight and preparation as it's purpose supports semantic interoperability. Arbitrary, conflicting, or unresolvable values SHOULD be avoided.
@@ -126,6 +125,14 @@ The design of the following attributes is motivated by the vast variety of ident
 | firmware-manufacturer-name | 0-1 | An identifier that is represented as the name of a platform manufacturer via a text (tstr) value that SHOULD be included in a CoSWID RIM that covers firmware.
 | firmware-model-name | 0-1 | An identifier that represents the target platform model via a text (tstr) value that SHOULD be included in a CoSWID RIM [FIXME: this seems to be the wrong intent]
 | firmware-version | 0-1 | An identifier that is represented as the version number of a specific firmware version corresponding to a given set of platform identifiers and SHOULD be included in a CoSWID RIM.
+
+## RIM extension for Software Package Management
+
+To enable very small CoSWID tags that basically are signed references to full Base RIMs for each software package that ultimately include all the hash values required by the appraisal procedure of a Verifier, the member rim-reference is added using the $$payload-extension CDDL extension point.
+
+| Attribute Name | Quantity | Description
+|---
+| rim-reference | 0-1 | A URI pointing to the CoSWID Base RIM that will list the payload reference measurements (hashes) in case of a minimal CoSWID tag.
 
 ## Additional Measurement Attributes for CoSWID
 
