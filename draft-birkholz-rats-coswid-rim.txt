@@ -94,14 +94,14 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.1.  Requirements Notation . . . . . . . . . . . . . . . . . .   4
    2.  CoSWID Attribute Extensions . . . . . . . . . . . . . . . . .   4
-     2.1.  RIM requirements on existing CoSWID attributes  . . . . .   5
+     2.1.  RIM requirements on existing CoSWID attributes  . . . . .   4
      2.2.  RIM extensions for Measured Boot  . . . . . . . . . . . .   5
-   3.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     2.3.  Additional Measurement Attributes for CoSWID  . . . . . .  10
+     2.4.  CoSWID RIM CDDL . . . . . . . . . . . . . . . . . . . . .  11
+   3.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
      3.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
      3.2.  Informative References  . . . . . . . . . . . . . . . . .  12
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
-
-
 
 
 
@@ -171,14 +171,15 @@ Internet-Draft                 CoSWID RIM                     March 2020
 
 
    This document provides an extension to the CoSWID specification
-   defined in RFC XXXX.  The extension adds attributes to CoSWID tags
-   that enable them to express RIMs.  A vital subset of these attributes
-   are illustrated in the TCG Reference Integrity Manifest Information
-   Model [ref] specification.  These attributes are added to the
-   existing CoSWID specification via the most general extension point
-   the CoSWID specification provides: $$coswid-extensions.  An
-   additional map definition named "reference-measurements" is added and
-   is defined in section [ref] of this document.
+   defined in [I-D.ietf-sacm-coswid].  The extension adds attributes to
+   CoSWID tags that enable them to express RIMs.  A vital subset of
+   these attributes are illustrated in the TCG Reference Integrity
+   Manifest Information Model [ref] specification.  These attributes are
+   added to the existing CoSWID specification via the most general
+   extension point the CoSWID specification provides: $$coswid-
+   extensions.  An additional map definition named "reference-
+   measurements" is added and is defined in section [ref] of this
+   document.
 
    Furthermore, a usage profile for signed CoSWID tags is defined in
    this specification in support of the software-component structure of
@@ -209,23 +210,6 @@ Internet-Draft                 CoSWID RIM                     March 2020
    3.  Attributes that allow for OID to be used in the description of
        Reference Integrity Measurements.
 
-
-
-
-
-
-
-
-
-
-
-
-
-Birkholz, et al.        Expires 10 September 2020               [Page 4]
-
-Internet-Draft                 CoSWID RIM                     March 2020
-
-
 2.1.  RIM requirements on existing CoSWID attributes
 
    As defined by NIST IR 8060 [ref], there are required "Meta
@@ -234,6 +218,14 @@ Internet-Draft                 CoSWID RIM                     March 2020
    attributes are mapped to CoSWID attributes and corresponding
    requirements on attributes defined in the CoSWID specification to
    compose valid NIST IR 8060 signed Payload content in the Concise
+
+
+
+Birkholz, et al.        Expires 10 September 2020               [Page 4]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
    Software Identity Reference Integrity Measurement (CoSWID RIM)
    representation.
 
@@ -274,6 +266,14 @@ Internet-Draft                 CoSWID RIM                     March 2020
    this variety can render semantic self-descriptiveness more difficult.
    Most importantly though: interoperability beats self-descriptiveness.
    A convergence towards a common identification scheme with respect to
+   software components and its subset that is firmware is highly
+   encouraged - alas not achieved at the time of creating this proposed
+   standard.
+
+
+
+
+
 
 
 
@@ -281,10 +281,6 @@ Birkholz, et al.        Expires 10 September 2020               [Page 5]
 
 Internet-Draft                 CoSWID RIM                     March 2020
 
-
-   software components and its subset that is firmware is highly
-   encouraged - alas not achieved at the time of creating this proposed
-   standard.
 
    +-----------------------------------+--------+----------------------+
    | Attribute Name                    |Quantity| Description          |
@@ -330,6 +326,10 @@ Internet-Draft                 CoSWID RIM                     March 2020
    |                                   |        | MUST be included -   |
    |                                   |        | even if it is the    |
    |                                   |        |CoSWID representation |
+   |                                   |        | - for every Support  |
+   |                                   |        | RIM (see 'binding-   |
+   |                                   |        | spec-name' and       |
+   |                                   |        |'binding-spec-version'|
 
 
 
@@ -338,10 +338,6 @@ Birkholz, et al.        Expires 10 September 2020               [Page 6]
 Internet-Draft                 CoSWID RIM                     March 2020
 
 
-   |                                   |        | - for every Support  |
-   |                                   |        | RIM (see 'binding-   |
-   |                                   |        | spec-name' and       |
-   |                                   |        |'binding-spec-version'|
    |                                   |        | definition in this   |
    |                                   |        | table).              |
    +-----------------------------------+--------+----------------------+
@@ -386,6 +382,10 @@ Internet-Draft                 CoSWID RIM                     March 2020
    | binding-spec-name                 | 1      | If the value of      |
    |                                   |        | 'payload-type' is an |
    |                                   |        | equivalent to the    |
+   |                                   |        | enumeration          |
+   |                                   |        |'indirect', the value |
+   |                                   |        |of this attribute MUST|
+   |                                   |        | contain a global     |
 
 
 
@@ -394,10 +394,6 @@ Birkholz, et al.        Expires 10 September 2020               [Page 7]
 Internet-Draft                 CoSWID RIM                     March 2020
 
 
-   |                                   |        | enumeration          |
-   |                                   |        |'indirect', the value |
-   |                                   |        |of this attribute MUST|
-   |                                   |        | contain a global     |
    |                                   |        | unique text (tstr)   |
    |                                   |        | identifier referring |
    |                                   |        | to the specification |
@@ -442,6 +438,10 @@ Internet-Draft                 CoSWID RIM                     March 2020
    |                                   |        | the same text (tstr) |
    |                                   |        |value, this attribute |
    |                                   |        | MAY be omitted.      |
+   +-----------------------------------+--------+----------------------+
+   | platform-manufacturer-name        | 0-1    | An identifier number |
+   |                                   |        | (uint) value that    |
+   |                                   |        | uniquely represents  |
 
 
 
@@ -450,10 +450,6 @@ Birkholz, et al.        Expires 10 September 2020               [Page 8]
 Internet-Draft                 CoSWID RIM                     March 2020
 
 
-   +-----------------------------------+--------+----------------------+
-   | platform-manufacturer-name        | 0-1    | An identifier number |
-   |                                   |        | (uint) value that    |
-   |                                   |        | uniquely represents  |
    |                                   |        | the firmware         |
    |                                   |        | manufacturer.  This  |
    |                                   |        | identifier MUST be   |
@@ -498,6 +494,10 @@ Internet-Draft                 CoSWID RIM                     March 2020
    |                                   |        | Platform Certificate |
    |                                   |        | Profile, Version 1.1 |
    |                                   |        | Revision 1 5 13 Feb  |
+   |                                   |        | 2019].               |
+   +-----------------------------------+--------+----------------------+
+   | firmware-manufacturer-id          | 1      |An IANA defined unique|
+   |                                   |        | value that is a      |
 
 
 
@@ -506,10 +506,6 @@ Birkholz, et al.        Expires 10 September 2020               [Page 9]
 Internet-Draft                 CoSWID RIM                     March 2020
 
 
-   |                                   |        | 2019].               |
-   +-----------------------------------+--------+----------------------+
-   | firmware-manufacturer-id          | 1      |An IANA defined unique|
-   |                                   |        | value that is a      |
    |                                   |        | Private Enterprise   |
    |                                   |        | Number (Platform     |
    |                                   |        | manufacturer unique  |
@@ -547,13 +543,17 @@ Internet-Draft                 CoSWID RIM                     March 2020
 
                                   Table 1
 
-   <CODE BEGINS>
-   $$coswid-extension //= (reference-measurement => reference-measurement-entry)
+2.3.  Additional Measurement Attributes for CoSWID
 
-   reference-measurement-entry = {
-     ? payload-type => direct / indirect / hybrid,
-     ? platform-configuration-uri-global => any-uri,
-     ? platform-configuration-uri-local => any-uri,
+   [I-D.ietf-sacm-coswid] specifies a well-defined file hash structure
+   for integrity measurements of individual files in a file-system.
+   This documents extends this feature to all additional members of the
+   resource-collection group: 'directory', 'resource', and 'process'.
+   These new well-defined measurement options extend the scope of RIM to
+   (sub-)trees of files, software running in memory (e.g. available from
+   Trusted Execution Environments, such as SGX enclaves), and even
+   external resources, such as remote services of collections of RIM
+   bundles.
 
 
 
@@ -562,6 +562,28 @@ Birkholz, et al.        Expires 10 September 2020              [Page 10]
 Internet-Draft                 CoSWID RIM                     March 2020
 
 
+2.4.  CoSWID RIM CDDL
+
+   The following CDDL specification uses the existing CDDL extension
+   points as defined in [I-D.ietf-sacm-coswid]:
+
+   *  $$coswid-extension
+
+   *  $$payload-extension
+
+   *  $$directory-extension
+
+   *  $$resource-extension
+
+   *  $$process-extension
+
+   <CODE BEGINS>
+   $$coswid-extension //= (reference-measurement => reference-measurement-entry)
+
+   reference-measurement-entry = {
+     ? payload-type => direct / indirect / hybrid,
+     ? platform-configuration-uri-global => any-uri,
+     ? platform-configuration-uri-local => any-uri,
      binding-spec-name => text,
      binding-spec-version => text,
      platform-manufacturer-id => uint,
@@ -588,6 +610,14 @@ Internet-Draft                 CoSWID RIM                     March 2020
    platform-manufacturer-id = 64
    platform-manufacturer-name = 65
    platform-model-name = 66
+
+
+
+Birkholz, et al.        Expires 10 September 2020              [Page 11]
+
+Internet-Draft                 CoSWID RIM                     March 2020
+
+
    platform-version = 67
    firmware-manufacturer-id = 68
    firmware-manufacturer-name = 69
@@ -611,60 +641,30 @@ Internet-Draft                 CoSWID RIM                     March 2020
 
 3.  References
 
-
-
-Birkholz, et al.        Expires 10 September 2020              [Page 11]
-
-Internet-Draft                 CoSWID RIM                     March 2020
-
-
 3.1.  Normative References
+
+   [I-D.ietf-sacm-coswid]
+              Birkholz, H., Fitzgerald-McKay, J., Schmidt, C., and D.
+              Waltermire, "Concise Software Identification Tags", Work
+              in Progress, Internet-Draft, draft-ietf-sacm-coswid-13, 17
+              November 2019, <http://www.ietf.org/internet-drafts/draft-
+              ietf-sacm-coswid-13.txt>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-   [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
-              RFC 7950, DOI 10.17487/RFC7950, August 2016,
-              <https://www.rfc-editor.org/info/rfc7950>.
-
-   [RFC8071]  Watsen, K., "NETCONF Call Home and RESTCONF Call Home",
-              RFC 8071, DOI 10.17487/RFC8071, February 2017,
-              <https://www.rfc-editor.org/info/rfc8071>.
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
-
-   [RFC8288]  Nottingham, M., "Web Linking", RFC 8288,
-              DOI 10.17487/RFC8288, October 2017,
-              <https://www.rfc-editor.org/info/rfc8288>.
-
-   [RFC8342]  Bjorklund, M., Schoenwaelder, J., Shafer, P., Watsen, K.,
-              and R. Wilton, "Network Management Datastore Architecture
-              (NMDA)", RFC 8342, DOI 10.17487/RFC8342, March 2018,
-              <https://www.rfc-editor.org/info/rfc8342>.
-
-   [RFC8510]  Psenak, P., Ed., Talaulikar, K., Henderickx, W., and P.
-              Pillay-Esnault, "OSPF Link-Local Signaling (LLS)
-              Extensions for Local Interface ID Advertisement",
-              RFC 8510, DOI 10.17487/RFC8510, January 2019,
-              <https://www.rfc-editor.org/info/rfc8510>.
 
    [RFC8520]  Lear, E., Droms, R., and D. Romascanu, "Manufacturer Usage
               Description Specification", RFC 8520,
               DOI 10.17487/RFC8520, March 2019,
               <https://www.rfc-editor.org/info/rfc8520>.
 
-   [RFC8526]  Bjorklund, M., Schoenwaelder, J., Shafer, P., Watsen, K.,
-              and R. Wilton, "NETCONF Extensions to Support the Network
-              Management Datastore Architecture", RFC 8526,
-              DOI 10.17487/RFC8526, March 2019,
-              <https://www.rfc-editor.org/info/rfc8526>.
-
 3.2.  Informative References
-
 
 
 
