@@ -62,13 +62,8 @@ author:
 
 normative:
   RFC2119:
-  RFC8288:
   RFC8520:
-  RFC7950:
-  RFC8071:
-  RFC8342:
-  RFC8510:
-  RFC8526:
+  I-D.ietf-sacm-coswid: coswid
 
 informative:
   I-D.fedorkow-rats-network-device-attestation: riv
@@ -93,7 +88,7 @@ The Integrity Measurement Architecture (IMA) of the Linux Security Modules (LSM)
 
 In essence, to enable this appraisal procedure conducted by Verfiers an Attester's IMA provides Event Logs that include the hash values of every started software component and therefore are part of the Attestation Evidence an Attester creates. The complementary well-known-values that Verifiers require are included in the Reference Integrity Measurements (RIM). RIMs can be provided via Software Identification tags created by Endorsers, such as the software creators, manufacturers, vendors, or other trusted third parties (e.g. supply chain or certification entities).
 
-This document provides an extension to the CoSWID specification defined in RFC XXXX. The extension adds attributes to CoSWID tags that enable them to express RIMs. A vital subset of these attributes are illustrated in the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes are added to the existing CoSWID specification via the most general extension point the CoSWID specification provides: $$coswid-extensions. An additional map definition named "reference-measurements" is added and is defined in section [ref] of this document.
+This document provides an extension to the CoSWID specification defined in {{-coswid}}. The extension adds attributes to CoSWID tags that enable them to express RIMs. A vital subset of these attributes are illustrated in the TCG Reference Integrity Manifest Information Model [ref] specification. These attributes are added to the existing CoSWID specification via the most general extension point the CoSWID specification provides: $$coswid-extensions. An additional map definition named "reference-measurements" is added and is defined in section [ref] of this document.
 
 Furthermore, a usage profile for signed CoSWID tags is defined in this specification in support of the software-component structure of the RPM packet management system [ref]. Signed CoSWID tags that are aligned with that software m ... TBD
 
@@ -138,6 +133,20 @@ The design of the following attributes is motivated by the vast variety of ident
 | firmware-manufacturer-name | 0-1 | An identifier that is represented as the name of a platform manufacturer via a text (tstr) value that SHOULD be included in a CoSWID RIM.
 | firmware-model-name | 0-1 | An identifier that represents the target platform model via a text (tstr) value that SHOULD be included in a CoSWID RIM [FIXME: this seems to be the wrong intent]
 | firmware-version | 0-1 | An identifier that is represented as the version number of a specific firmware version corresponding to a given set of platform identifiers and SHOULD be included in a CoSWID RIM.
+
+## Additional Measurement Attributes for CoSWID
+
+{{-coswid}} specifies a well-defined file hash structure for integrity measurements of individual files in a file-system. This documents extends this feature to all additional members of the resource-collection group: 'directory', 'resource', and 'process'. These new well-defined measurement options extend the scope of RIM to (sub-)trees of files, software running in memory (e.g. available from Trusted Execution Environments, such as SGX enclaves), and even external resources, such as remote services of collections of RIM bundles.
+
+## CoSWID RIM CDDL
+
+The following CDDL specification uses the existing CDDL extension points as defined in {{-coswid}}:
+
+* $$coswid-extension
+* $$payload-extension
+* $$directory-extension
+* $$resource-extension
+* $$process-extension
 
 ~~~~ CDDL
 <CODE BEGINS>
