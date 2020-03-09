@@ -5,7 +5,7 @@ docname: draft-birkholz-rats-coswid-rim-latest
 stand_alone: true
 ipr: trust200902
 area: Security
-wg: SACM Working Group
+wg: RATS Working Group
 kw: Internet-Draft
 cat: std
 pi:
@@ -38,16 +38,6 @@ author:
   street: 9800 Savage Road
   city: Ft. Meade
   region: Maryland
-  country: USA
-- ins: M. Wiseman
-  name: Monty Wiseman
-  org: GE Global Research
-  abbrev: GE Global Research
-  email: monty.wiseman@ge.com
-  street: ""
-  code: ""
-  city: ""
-  region: ""
   country: USA
 - ins: D. Waltermire
   name: David Waltermire
