@@ -52,13 +52,12 @@ author:
 
 normative:
   RFC2119:
-  RFC8520:
+  RFC8174:
   I-D.ietf-sacm-coswid: coswid
 
 informative:
   I-D.fedorkow-rats-network-device-attestation: riv
   I-D.ietf-rats-architecture: rats-arch
-  I-D.ietf-rats-eat: eat
 
 --- abstract
 
@@ -113,17 +112,17 @@ The design of the additional RIM attributes in this section is motivated by the 
 | Attribute Name | Quantity | Description
 |---
 | payload-type | 0-1 | The value of this attribute MUST be one equivalent of the following three choices. 'direct': the representation used in this RIM (and referred RIMs) is using the CoSWID encoding as its representation. 'indirect': the representation used in referred RIMs ('Support RIMs) is using a different representation than CoSWID as it's encoding. Analogously, a reference to the corresponding specification MUST be provided if the value is set to an equivalent of 'indirect' (see binding-spec-name and binding-spec-version). 'hybrid': the representation used in the referred RIMs ('Support RIMs') is a mix of CoSWID representations and other representations. In this case, a reference to the representation used MUST be included - even if it is the CoSWID representation - for every Support RIM (see 'binding-spec-name' and 'binding-spec-version' definition in this table).
-| platform-configuration-uri-global | 0-1 | A byte-comparable reference to a Platform Configuration URI as defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019] for X.509v3 certificates that MUST be identical to the URI included in a TCG Platform Certificate pointing to a resource providing a copy of the CoSWID RIM this attribute is included in.
-| platform-configuration-uri-local | 0-1 | A byte-comparable reference to a Platform Configuration URI defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019] that MUST represent the resource at which a copy of this CoSWID RIM can be found within the (composite) device/platform itself.
+| platform-configuration-uri-global | 0-1 | A byte-comparable reference to a Platform Configuration URI as defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1] for X.509v3 certificates that MUST be identical to the URI included in a TCG Platform Certificate pointing to a resource providing a copy of the CoSWID RIM this attribute is included in.
+| platform-configuration-uri-local | 0-1 | A byte-comparable reference to a Platform Configuration URI defined by the TCG Platform Certificate Profile [ref TCG Platform Certificate Profile, Version 1.1] that MUST represent the resource at which a copy of this CoSWID RIM can be found within the (composite) device/platform itself.
 | binding-spec-name | 1 | If the value of 'payload-type' is an equivalent to the enumeration 'indirect', the value of this attribute MUST contain a global unique text (tstr) identifier referring to the specification that defines the representation of the referred RIM in order to enable its decoding.
 | binding-spec-version | 1 | If the value of 'payload-type' is an equivalent to the enumeration 'indirect', the value of this attribute MUST contain a unique version number with respect to the specification represented in the value of 'binding-spec-name'.
 | platform-manufacturer-id | 0-1 | An identifier based on the IANA Private Enterprise Number registry that is assigned to firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform manufacturer are represented by the same text (tstr) value. Analogously, if the firmware manufacturer and the platform manufacturer are represented via the same text (tstr) value, this attribute MAY be omitted.
 | platform-manufacturer-name | 0-1 | An identifier number (uint) value that uniquely represents the firmware manufacturer. This identifier MUST be included unless the firmware manufacturer and the platform manufacturer are represented via the same number (unit) value, this attribute MAY be omitted.
 | platform-model-name | 1 | An identifier text (tstr) value enabling the identification of a certain device model/type composite. The reliability of this identifier is not absolute. In consequence this identifier MUST NOT be omitted. In an case, the use of this identifier requires foresight and preparation as it's purpose supports semantic interoperability. Arbitrary, conflicting, or unresolvable values SHOULD be avoided.
-| platform-version | 0-1 | A byte-comparable reference to a Platform Certificate's 'Manufacturer-Specific Identifier' extension value [ref TCG Platform Certificate Profile, Version 1.1 Revision 1 5 13 Feb 2019].
+| platform-version | 0-1 | A byte-comparable reference to a Platform Certificate's 'Manufacturer-Specific Identifier' extension value [ref TCG Platform Certificate Profile, Version 1.1].
 | firmware-manufacturer-id | 0-1 | An IANA defined unique value that is a Private Enterprise Number (Platform manufacturer unique identifier) that SHOULD be included in a CoSWID RIM that covers firmware.
 | firmware-manufacturer-name | 0-1 | An identifier that is represented as the name of a platform manufacturer via a text (tstr) value that SHOULD be included in a CoSWID RIM that covers firmware.
-| firmware-model-name | 0-1 | An identifier that represents the target platform model via a text (tstr) value that SHOULD be included in a CoSWID RIM [FIXME: this seems to be the wrong intent]
+| firmware-model-name | 0-1 | An identifier that represents the target platform model via a text (tstr) value that SHOULD be included in a CoSWID RIM.
 | firmware-version | 0-1 | An identifier that is represented as the version number of a specific firmware version corresponding to a given set of platform identifiers and SHOULD be included in a CoSWID RIM.
 
 ## RIM extension for Software Package Management
@@ -153,5 +152,13 @@ The following CDDL specification uses the existing CDDL extension points as defi
 {::include coswid-rim-extension.cddl}
 <CODE ENDS>
 ~~~~
+
+# Privacy Considerations
+
+TBD
+
+# Security Considerations
+
+To be elaborated on
 
 --- back
