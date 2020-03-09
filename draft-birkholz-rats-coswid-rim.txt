@@ -2,14 +2,12 @@
 
 
 
-SACM Working Group                                           H. Birkholz
+RATS Working Group                                           H. Birkholz
 Internet-Draft                                            Fraunhofer SIT
 Intended status: Standards Track                            P. Uiterwijk
 Expires: 10 September 2020                                       Red Hat
                                                      J. Fitzgerald-McKay
                                                    Department of Defense
-                                                              M. Wiseman
-                                                      GE Global Research
                                                            D. Waltermire
                                                                     NIST
                                                             9 March 2020
@@ -48,6 +46,8 @@ Note to Readers
    Source for this draft and an issue tracker can be found at
    https://github.com/ietf-rats/draft-birkholz-rats-coswid-rim
    (https://github.com/ietf-rats/draft-birkholz-rats-coswid-rim).
+
+
 
 
 
@@ -733,13 +733,6 @@ Internet-Draft                 CoSWID RIM                     March 2020
    Email: jmfitz2@nsa.gov
 
 
-   Monty Wiseman
-   GE Global Research
-   United States of America
-
-   Email: monty.wiseman@ge.com
-
-
    David Waltermire
    National Institute of Standards and Technology
    100 Bureau Drive
@@ -747,6 +740,13 @@ Internet-Draft                 CoSWID RIM                     March 2020
    United States of America
 
    Email: david.waltermire@nist.gov
+
+
+
+
+
+
+
 
 
 
